@@ -16,19 +16,34 @@ public class MedicoController {
     private MedicoRepository medicoRepository;
 
     @PostMapping
-    public void registrarMedico(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico){
+    public void registrarMedico(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico) {
         medicoRepository.save(new Medico(datosRegistroMedico));
     }
 
     @GetMapping
-    public Page<DatosListadoMedico> listadomedicos(Pageable paginacion){
+    public Page<DatosListadoMedico> listadomedicos(Pageable paginacion) {
+        //return medicoRepository.findByActivoTrue(paginacion).map(DatosListadoMedico::new);
         return medicoRepository.findAll(paginacion).map(DatosListadoMedico::new);
     }
 
     @PutMapping
     @Transactional
-    public void actualizarMedico(@RequestBody @Valid ActualizarDatosMedico actualizarDatosMedico){
+    public void actualizarMedico(@RequestBody @Valid ActualizarDatosMedico actualizarDatosMedico) {
         Medico medico = medicoRepository.getReferenceById(actualizarDatosMedico.Id());
         medico.actualizarDatos(actualizarDatosMedico);
     }
+
+    //DELETE LOGICO
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void eliminarMedico(@PathVariable Long id) {
+        Medico medico = medicoRepository.getReferenceById(id);
+        medico.desactivarMedico();
+    }
+
+    // DELETE EN BASE DE DATOS
+    //  public void eliminarMedico(@PathVariable Long id){
+    //     Medico medico = medicoRepository.getReferenceById(id);
+    //     medicoRepository.delete(medico);
+//}
 }

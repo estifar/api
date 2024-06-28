@@ -23,6 +23,7 @@ public class Medico {
     private String email;
     private String telefono;
     private String documento;
+    private Boolean activo; // Campo booleano
 
     @Enumerated(EnumType.STRING)
     private Especialidad especialidad;
@@ -31,6 +32,7 @@ public class Medico {
     private Direccion direccion;
 
     public Medico(DatosRegistroMedico datosRegistroMedico) {
+        this.activo = true; // valor por defecto
         this.nombre = datosRegistroMedico.nombre();
         this.email = datosRegistroMedico.email();
         this.telefono = datosRegistroMedico.telefono();
@@ -49,8 +51,9 @@ public class Medico {
         if (actualizarDatosMedico.direccion() != null){
             this.direccion = direccion.actualizarDatos(actualizarDatosMedico.direccion());
         }
+    }
 
-
-
+    public void desactivarMedico() {
+        this.activo = false;
     }
 }
